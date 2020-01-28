@@ -19,6 +19,7 @@ def press_key(settings: Settings):
         keyboard.press(str(settings.input_key))
         time.sleep(int(settings.wait_time))
 
+
 def check_walk():
     walk_forwards = False
     valid_response = False
@@ -36,6 +37,7 @@ def check_walk():
 
     return walk_forwards
 
+
 def get_settings():
     settings = Settings(
             input("What key?"),
@@ -45,12 +47,19 @@ def get_settings():
     settings.walk_forwards = check_walk()
     if settings.walk_forwards:
         settings.repeats = input("how many repeats before walking?")
+
     return settings
 
 
 def report_status(settings: Settings):
     print("pressing %s ... " %settings.input_key)
     print("waiting %s seconds" %settings.wait_time)
+
+def walk_forwards(should_walk: bool):
+    if walk_forwards:
+        keyboard.press('w')
+        time.sleep(0.2)
+        keyboard.release('w')
 
 
 def run():
@@ -60,6 +69,7 @@ def run():
 
     while settings.should_run:
         press_key(settings)
+        walk_forwards(settings.walk_forwards)
         report_status(settings)
         
 
