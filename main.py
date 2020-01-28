@@ -1,5 +1,4 @@
 #! /bin/python3
-import curses
 import time
 import pynput
 
@@ -21,6 +20,7 @@ def press_key(settings: Settings):
     for i in range(int(settings.repeats)):
         keyboard.press(str(settings.input_key))
         time.sleep(int(settings.wait_time))
+        report_status(settings)
 
 
 def check_walk():
@@ -29,13 +29,13 @@ def check_walk():
 
     while not valid_response:
         valid_response = True
-        walk_input = input("walk forwards? (Y/N)")
+        walk_input = input("walk forwards? (Y/N) ")
         if (walk_input == "Y" or walk_input == "y"):
             walk_forwards = True
         elif (walk_input == "N" or walk_input == "n"):
             walk_forwards = False
         else:
-            print("Ansver Y or N")
+            print("Ansver Y or N ")
             valid_response = False
 
     return walk_forwards
@@ -45,14 +45,14 @@ def setup_doubleclick():
     valid_response = False
     while not valid_response:
         valid_response = True
-        click_input = input("Should doubleclick? (Y/N)")
+        click_input = input("Should doubleclick? (Y/N) ")
 
         if (click_input == "Y" or click_input == "y"):
             should_doubleclick = True
         elif (click_input == "N" or click_input == "n"):
             should_doubleclick = False
         else:
-            print("Ansver Y or N")
+            print("Ansver Y or N ")
             valid_response = False
 
     return should_doubleclick
@@ -60,16 +60,16 @@ def setup_doubleclick():
 
 def setup_walk(settings: Settings):
     if settings.walk_forwards:
-        settings.repeats = input("how many repeats before walking?")
-        settings.walk_time = input("Walk for? ... (seconds)")
+        settings.repeats = input("how many repeats before walking? ")
+        settings.walk_time = input("Walk for? ... (seconds) ")
 
     settings.should_doubleclick = setup_doubleclick()
 
 
 def get_settings():
     settings = Settings(
-            input("What key?"),
-            input("what time?"),
+            input("What key? "),
+            input("what time? "),
             )
     
     settings.walk_forwards = check_walk()
@@ -98,16 +98,24 @@ def doubleclick(should_doubleclick: bool):
         mouse.press(mouse_buttons.left)
         mouse.release(mouse_buttons.left)
 
+def countdown(count: int):
+    print("Starting in...")
+    for i in range(count):
+        time.sleep(1)
+        print(count - i)
+
 def run():
     settings = get_settings()
 
     settings.should_run = True
 
+    countdown(5)
+
     while settings.should_run:
         press_key(settings)
         walk_forwards(settings.walk_time)
-        report_status(settings)
         doubleclick(settings.should_doubleclick)
+        print("\n-----------Finished rotation-----------\n")
         
 
 def main():
