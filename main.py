@@ -1,6 +1,5 @@
 #! /bin/python3
 import curses
-import keyboard
 import time
 from pynput.keyboard import Key, Controller
 
