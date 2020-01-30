@@ -16,10 +16,18 @@ class Settings:
         self.repeats = 0
         self.walk_time = 0
 
+
 def press_key(settings: Settings):
-    for i in range(int(settings.repeats)):
-        keyboard.press(str(settings.input_key))
-        time.sleep(int(settings.wait_time))
+    repeats = settings.repeats if settings.repeats != 0 else 1
+
+    for i in range(int(repeats)):
+        if settings.input_key == mouse_buttons.left or settings.input_key == mouse_buttons.right:
+            mouse.press(settings.input_key)
+            mouse.release(settings.input_key)
+        else:
+            keyboard.press(str(settings.input_key))
+
+        time.sleep(float(settings.wait_time))
         report_status(settings)
 
 
@@ -40,9 +48,11 @@ def check_walk():
 
     return walk_forwards
 
+
 def setup_doubleclick():
     should_doubleclick = False
     valid_response = False
+
     while not valid_response:
         valid_response = True
         click_input = input("Should doubleclick? (Y/N) ")
@@ -65,12 +75,20 @@ def setup_walk(settings: Settings):
 
     settings.should_doubleclick = setup_doubleclick()
 
+def check_mouse_keys(settings: Settings):
+    if settings.input_key == "mb1":
+        settings.input_key = mouse_buttons.left
+    elif settings.input_key == "mb2":
+        settings.input_key = mouse_buttons.right
+
 
 def get_settings():
     settings = Settings(
             input("What key? "),
             input("what time? "),
             )
+
+    check_mouse_keys(settings)
     
     settings.walk_forwards = check_walk()
     setup_walk(settings)
@@ -86,7 +104,7 @@ def walk_forwards(wait_time: int):
     if wait_time != 0:
         print("walking for %s seconds" %wait_time)
         keyboard.press('w')
-        time.sleep(int(wait_time))
+        time.sleep(float(wait_time))
         keyboard.release('w')
 
 def doubleclick(should_doubleclick: bool):
@@ -99,7 +117,7 @@ def doubleclick(should_doubleclick: bool):
         mouse.release(mouse_buttons.left)
 
 def countdown(count: int):
-    print("Starting in...")
+    print("Starting in... %s" %count)
     for i in range(count):
         time.sleep(1)
         print(count - i)
@@ -109,7 +127,7 @@ def run():
 
     settings.should_run = True
 
-    countdown(5)
+    countdown(4)
 
     while settings.should_run:
         press_key(settings)
