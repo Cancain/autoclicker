@@ -21,7 +21,8 @@ def press_key(settings: Settings):
     repeats = settings.repeats if settings.repeats != 0 else 1
 
     for i in range(int(repeats)):
-        if settings.input_key == mouse_buttons.left or settings.input_key == mouse_buttons.right:
+        if (settings.input_key == mouse_buttons.left or 
+        settings.input_key == mouse_buttons.right):
             mouse.press(settings.input_key)
             mouse.release(settings.input_key)
         else:
@@ -100,12 +101,14 @@ def report_status(settings: Settings):
     print("pressing %s ... " %settings.input_key)
     print("waiting %s seconds" %settings.wait_time)
 
+
 def walk_forwards(wait_time: int):
     if wait_time != 0:
         print("walking for %s seconds" %wait_time)
         keyboard.press('w')
         time.sleep(float(wait_time))
         keyboard.release('w')
+
 
 def doubleclick(should_doubleclick: bool):
     if should_doubleclick:
@@ -116,11 +119,13 @@ def doubleclick(should_doubleclick: bool):
         mouse.press(mouse_buttons.left)
         mouse.release(mouse_buttons.left)
 
+
 def countdown(count: int):
     print("Starting in... %s" %count)
     for i in range(count):
         time.sleep(1)
         print(count - i)
+
 
 def run():
     settings = get_settings()
